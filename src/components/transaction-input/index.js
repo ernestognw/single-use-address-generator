@@ -66,7 +66,7 @@ const TransactionInput = ({ onGenerated }) => {
 
     const txParams = {
       ...data,
-      chainId: 3,
+      chainId: Number(data.chainId),
       nonce: 0, // 0 since every single use tx is assumed new
       value: BigNumber.from(data.value),
       gasLimit: BigNumber.from(data.gasLimit),
@@ -205,9 +205,13 @@ const TransactionInput = ({ onGenerated }) => {
           <FormLabel>data</FormLabel>
           <Input
             {...register("data", {
-              validate: (value) =>
-                utils.isHexString(value) ||
-                "Invalid data. Should be HEX prefixed by 0x",
+              validate: (value) => {
+                if (!value) return true;
+                return (
+                  utils.isHexString(value) ||
+                  "Invalid data. Should be HEX prefixed by 0x"
+                );
+              },
             })}
             bg={"gray.100"}
             border={0}
